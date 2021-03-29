@@ -9,10 +9,16 @@
 <body>
 	<%
 	String userName = "";
+	String error = "";
 	Object username = request.getAttribute("username");
+	Object errorMessage = request.getAttribute("error");
 	if (username != null)
 	{
 		userName = username.toString();
+	}
+	if (errorMessage != null)
+	{
+		error = (String) errorMessage;
 	}
 	Class.forName("com.ibm.db2.jcc.DB2Driver");
 	Object rss = request.getAttribute("results");
@@ -21,12 +27,13 @@
 	
 	<h2>Welcome, <%=userName%>! Here are your current notes:</h2>
 	
+	<font color="red"><%=error%></font>
+	
 	<form action="./AddNote.jsp">
 		<input type="submit" value="Add a Note to the List">
 	</form>
 	
 	<br>
-	
 	<table cellpadding="10" cellspacing="10" border="4px solid black" display="inline-block">
 	<tr>
 	<th>ID</th>
@@ -36,6 +43,7 @@
 	<th>DAY</th>
 	<th>TIMECREATED</th>
 	<th>NOTESNAME</th>
+	<th>UPDATE</th>
 	</tr>
 	<%
 	Iterator<ArrayList<String>> iter = results.iterator();
@@ -45,19 +53,31 @@
 		ArrayList temp = (ArrayList) iter.next();
 		
 		out.print("<tr>");
+		out.print("<form action=\"./UpdateNoteServlet\">");
 		
 		out.print("<td>" + temp.get(0) + "</td>");
-		out.print("<td>" + temp.get(1) + "</td>");
+		out.print("<td>" + "<textarea id=\""+ temp.get(6) +"\" name=\""+ temp.get(6) +"\" rows=\"4\" cols=\"50\">" + temp.get(1) + "</textarea></td>");
 		out.print("<td>" + temp.get(2) + "</td>");
 		out.print("<td>" + temp.get(3) + "</td>");
 		out.print("<td>" + temp.get(4) + "</td>");
 		out.print("<td>" + temp.get(5) + "</td>");
 		out.print("<td>" + temp.get(6) + "</td>");
+		out.print("<td>" + "<input type=\"submit\" value=\"Update Note\">" + "</td>");
+		
+		out.print("</form>");
 		
 		out.print("</tr>");
 	}
 	%>
 	</table>
+	
+	<br>
+	
+	Enter a term to filter the list. Filter with no keyword to reset the list:
+	<form action="./NotesRedirectServlet">
+		<input name="searchterm" type="text" size="20">
+		<input type="submit" value="Filter List">
+	</form>
 	
 	<br>
 	
@@ -74,6 +94,12 @@
 		%>
 		</select>
 		<input type="submit" value="Remove Selected Note from List">
+	</form>
+	
+	<br>
+	
+	<form action="./GoBackToWelcomeServlet">
+		<input type="submit" value="Go back to the Welcome page">
 	</form>
 
 </body>

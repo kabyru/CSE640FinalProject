@@ -15,19 +15,19 @@ import edu.louisville.cse640.cotrollers.DatabaseConnectionController;
 import edu.louisville.cse640.cotrollers.NotesController;
 
 /**
- * Servlet implementation class RemoveNoteServlet
+ * Servlet implementation class FilterNoteServlet
  */
-@WebServlet("/RemoveNoteServlet")
-public class RemoveNoteServlet extends HttpServlet {
+@WebServlet("/FilterNoteServlet")
+public class FilterNoteServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     private static Connection            dbConnection	= null;
     private DatabaseConnectionController dcc			= null;
     private NotesController              nc				= null;
-       
+    
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public RemoveNoteServlet() {
+    public FilterNoteServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -61,13 +61,14 @@ public class RemoveNoteServlet extends HttpServlet {
 		//response.getWriter().append("Served at: ").append(request.getContextPath());
 		String url = "./NotesRedirectServlet";
 		String userName = "";
-		String noteName = "";
+		String searchTerm = "";
 		
-		noteName = request.getParameter("removeitem");
-		if (noteName == null || noteName.length() == 0)
+		searchTerm = request.getParameter("searchterm");
+		if (searchTerm == null || searchTerm.length() == 0)
 		{
-			//url = "./AddNote.jsp";
 			request.setAttribute("error", "Note content or Note Name cannot be empty.");
+			RequestDispatcher dispatcher = request.getRequestDispatcher(url);
+			dispatcher.forward(request, response);
 		}
 		HttpSession session = request.getSession(true);
 		if (session != null)
@@ -83,20 +84,16 @@ public class RemoveNoteServlet extends HttpServlet {
 		try
 		{
 			connect2database();
-			//At this point, we now have userName and noteName. We can now call notesController.
-			if (nc.removeNote(userName, noteName) != 1)
-			{
-				System.out.println("ERROR: There was an error adding the note to the Database...");
-			}
+			//At this point, we now have userName and searchTerm. We can now call notesController.
 			
-			dcc.disconnectFromDatabase();
+			
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
 		}
-		RequestDispatcher dispatcher = request.getRequestDispatcher(url);
-		dispatcher.forward(request, response);
+		
+		
 	}
 
 	/**

@@ -12,22 +12,22 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import edu.louisville.cse640.cotrollers.DatabaseConnectionController;
-import edu.louisville.cse640.cotrollers.NotesController;
+import edu.louisville.cse640.cotrollers.UsersController;
 
 /**
- * Servlet implementation class RemoveNoteServlet
+ * Servlet implementation class GoBackToWelcomeServlet
  */
-@WebServlet("/RemoveNoteServlet")
-public class RemoveNoteServlet extends HttpServlet {
+@WebServlet("/GoBackToWelcomeServlet")
+public class GoBackToWelcomeServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-    private static Connection            dbConnection	= null;
+	private static Connection            dbConnection	= null;
     private DatabaseConnectionController dcc			= null;
-    private NotesController              nc				= null;
+    private UsersController              uc				= null;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public RemoveNoteServlet() {
+    public GoBackToWelcomeServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -44,7 +44,7 @@ public class RemoveNoteServlet extends HttpServlet {
             }
             else
             {
-                nc = new NotesController(dbConnection);
+                uc = new UsersController(dbConnection);
             } // end if
         }
         else
@@ -59,16 +59,8 @@ public class RemoveNoteServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		//response.getWriter().append("Served at: ").append(request.getContextPath());
-		String url = "./NotesRedirectServlet";
+		String url = "./Welcome.jsp";
 		String userName = "";
-		String noteName = "";
-		
-		noteName = request.getParameter("removeitem");
-		if (noteName == null || noteName.length() == 0)
-		{
-			//url = "./AddNote.jsp";
-			request.setAttribute("error", "Note content or Note Name cannot be empty.");
-		}
 		HttpSession session = request.getSession(true);
 		if (session != null)
 		{
@@ -79,24 +71,23 @@ public class RemoveNoteServlet extends HttpServlet {
 		{
 			System.out.println("Session is null!");
 		}
-		
 		try
 		{
 			connect2database();
-			//At this point, we now have userName and noteName. We can now call notesController.
-			if (nc.removeNote(userName, noteName) != 1)
+			//At this point, use the userName to find the fullName
+			if (uc.findUser(userName) == true)
 			{
-				System.out.println("ERROR: There was an error adding the note to the Database...");
+				request.setAttribute("fullname", uc.getFullName());
 			}
-			
 			dcc.disconnectFromDatabase();
+			
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
 		}
 		RequestDispatcher dispatcher = request.getRequestDispatcher(url);
-		dispatcher.forward(request, response);
+        dispatcher.forward(request, response);
 	}
 
 	/**

@@ -66,11 +66,20 @@ public class NotesRedirectServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		PrintWriter out = response.getWriter();
 		String userName = "";
+		String error = "";
 		//out.println("You've made it to the Notes Servlet!");
 		
 		try
 		{
 			connect2database();
+			
+			Object errorMessage = request.getAttribute("error");
+			if (errorMessage != null)
+			{
+				error = (String) errorMessage;
+				request.setAttribute("error", error);
+			}
+			
 			HttpSession session = request.getSession(true);
 			if (session != null)
 			{
@@ -81,9 +90,22 @@ public class NotesRedirectServlet extends HttpServlet {
 			{
 				System.out.println("Session is null!");
 			}
+			
+			//The next piece of code depends on if a keyword was provided or not.
+			String searchTerm = "";
+			searchTerm = request.getParameter("searchterm");
+			ResultSet rs;
 			Statement st = dbConnection.createStatement();
-			String query = "SELECT * FROM NOTES_TABLE WHERE ID ='" + userName + "'";
-			ResultSet rs = st.executeQuery(query);
+			if (searchTerm == null || searchTerm.length() == 0)
+			{
+				st = dbConnection.createStatement();
+				String query = "SELECT * FROM NOTES_TABLE WHERE ID ='" + userName + "'";
+				rs = st.executeQuery(query);
+			}
+			else
+			{
+				rs = nc.getFilteredNotes(userName, searchTerm);
+			}
 			
 			ArrayList<ArrayList<String>> biDemArrList = new ArrayList<ArrayList<String>>();
 			
