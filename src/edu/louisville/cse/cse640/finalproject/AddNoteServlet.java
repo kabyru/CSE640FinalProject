@@ -1,6 +1,7 @@
 package edu.louisville.cse.cse640.finalproject;
 
 import java.io.IOException;
+import java.sql.Connection;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -13,18 +14,11 @@ import javax.servlet.http.HttpSession;
 import edu.louisville.cse640.cotrollers.DatabaseConnectionController;
 import edu.louisville.cse640.cotrollers.NotesController;
 
-import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
-import java.sql.ResultSet;
-
 /**
- * Servlet implementation class NotesRedirectServlet
+ * Servlet implementation class AddNoteServlet
  */
-@WebServlet("/NotesRedirectServlet")
-public class NotesRedirectServlet extends HttpServlet {
+@WebServlet("/AddNoteServlet")
+public class AddNoteServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     private static Connection            dbConnection	= null;
     private DatabaseConnectionController dcc			= null;
@@ -33,7 +27,7 @@ public class NotesRedirectServlet extends HttpServlet {
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public NotesRedirectServlet() {
+    public AddNoteServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -64,59 +58,52 @@ public class NotesRedirectServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		PrintWriter out = response.getWriter();
+		//response.getWriter().append("Served at: ").append(request.getContextPath());
+		String url = "./NotesRedirectServlet";
 		String userName = "";
-		//out.println("You've made it to the Notes Servlet!");
+		String note = "";
+		String noteName = "";
+		noteName = request.getParameter("notename");
+		note = request.getParameter("note");
 		
-		try
+		if (noteName == null || noteName.length() == 0 || note == null || note.length() == 0)
 		{
-			connect2database();
-			HttpSession session = request.getSession(true);
-			if (session != null)
-			{
-				userName = (String) session.getAttribute("user");
-				request.setAttribute("username", userName);
-			}
-			if (session == null)
-			{
-				System.out.println("Session is null!");
-			}
-			Statement st = dbConnection.createStatement();
-			String query = "SELECT * FROM NOTES_TABLE WHERE ID ='" + userName + "'";
-			ResultSet rs = st.executeQuery(query);
-			
-			ArrayList<ArrayList<String>> biDemArrList = new ArrayList<ArrayList<String>>();
-			
-			
-			while(rs.next())
-			{
-				ArrayList<String> temp = new ArrayList<String>();
-				temp.add(rs.getString(1));
-				temp.add(rs.getString(2));
-				temp.add(String.valueOf(rs.getInt(3)));
-				temp.add(String.valueOf(rs.getInt(4)));
-				temp.add(String.valueOf(rs.getInt(5)));
-				temp.add(rs.getString(6));
-				temp.add(rs.getString(7));
-				biDemArrList.add(temp);
-			}
-			
-			
-			request.setAttribute("results",biDemArrList);
-			//rs.close();
-			st.close();
-			dcc.disconnectFromDatabase();
-			String url = "/NotesList.jsp";
-	        RequestDispatcher dispatcher = request.getRequestDispatcher(url);
-	        dispatcher.forward(request, response);
-			
+			url = "./AddNote.jsp";
+			request.setAttribute("error", "Note content or Note Name cannot be empty.");
 		}
-		catch (Exception e)
+		else
 		{
-			e.printStackTrace();
+			try
+			{
+				connect2database();
+				HttpSession session = request.getSession(true);
+				if (session != null)
+				{
+					userName = (String) session.getAttribute("user");
+					request.setAttribute("username", userName);
+				}
+				if (session == null)
+				{
+					System.out.println("Session is null!");
+				}
+				//At this point, we now have userName, noteName, and note. We can now call notesController.
+				if (nc.insertNote(userName, note, noteName) != 1)
+				{
+					System.out.println("ERROR: There was an error adding the note to the Database...");
+				}
+				
+				dcc.disconnectFromDatabase();
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			}
 		}
-		
+		RequestDispatcher dispatcher = request.getRequestDispatcher(url);
+		dispatcher.forward(request, response);
 	}
+		
+
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
