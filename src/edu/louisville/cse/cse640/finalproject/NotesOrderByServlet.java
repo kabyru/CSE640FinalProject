@@ -2,8 +2,6 @@ package edu.louisville.cse.cse640.finalproject;
 
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -17,10 +15,10 @@ import edu.louisville.cse640.cotrollers.DatabaseConnectionController;
 import edu.louisville.cse640.cotrollers.NotesController;
 
 /**
- * Servlet implementation class UpdateNoteServlet
+ * Servlet implementation class NotesOrderByServlet
  */
-@WebServlet("/UpdateNoteServlet")
-public class UpdateNoteServlet extends HttpServlet {
+@WebServlet("/NotesOrderByServlet")
+public class NotesOrderByServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     private static Connection            dbConnection	= null;
     private DatabaseConnectionController dcc			= null;
@@ -29,11 +27,11 @@ public class UpdateNoteServlet extends HttpServlet {
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public UpdateNoteServlet() {
+    public NotesOrderByServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
-
+    
     private void connect2database()
     {
         dcc = new DatabaseConnectionController("COMPANY");
@@ -54,7 +52,7 @@ public class UpdateNoteServlet extends HttpServlet {
             System.out.println("Driver Failed");
         }
     }
-    
+
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
@@ -63,11 +61,18 @@ public class UpdateNoteServlet extends HttpServlet {
 		//response.getWriter().append("Served at: ").append(request.getContextPath());
 		String url = "./NotesRedirectServlet";
 		String userName = "";
-		String noteName = "";
-		String newNoteContent = "";
+		String sortChoice = "";
+		String sortOrder = "";
 		
-		//Idea: we get a list of NOTENAMEs for the userName, we then FOR LOOP through
-		//to find a noteName that leads to a non-null note value.
+		sortChoice = request.getParameter("sortchoice");
+		sortOrder = request.getParameter("sortorder");
+		
+		if (sortChoice == null || sortChoice.length() == 0 || sortOrder == null || sortOrder.length() == 0)
+		{
+			request.setAttribute("error", "ERROR: There was an error sorting the list.");
+			RequestDispatcher dispatcher = request.getRequestDispatcher(url);
+			dispatcher.forward(request, response);
+		}
 		
 		HttpSession session = request.getSession(true);
 		if (session != null)
@@ -83,47 +88,9 @@ public class UpdateNoteServlet extends HttpServlet {
 		try
 		{
 			connect2database();
-			ResultSet rs;
-			Statement st = dbConnection.createStatement();
-			st = dbConnection.createStatement();
-			String query = "SELECT NOTESNAME FROM NOTES_TABLE WHERE ID ='" + userName + "'";
-			rs = st.executeQuery(query);
-			
-			while(rs.next())
-			{
-				if (request.getParameter(rs.getString(1)) != null && request.getParameter(rs.getString(1)).length() != 0)
-				{
-					noteName = rs.getString(1);
-					newNoteContent = request.getParameter(rs.getString(1));
-					break;
-				}
-			}
-			
-			String noteNameParameter = noteName + "_input";
-			String newNoteName = request.getParameter(noteNameParameter);
-			
-			//At this point, we have found the noteName relevant to the note we want to update.
-			st.close();
-			rs.close();
-			
-			if (nc.updateNoteContent(userName, noteName, newNoteContent) != 1)
-			{
-				System.out.println("ERROR: There was an error updating the database...");
-				request.setAttribute("error", "ERROR: There was an error updating the database...");
-			}
+			//Now, we have userName, sortOrder, and sortChoice.
 			
 			
-			if (!noteName.equals(newNoteName))
-			{
-				if (nc.updateNoteNickname(userName, noteName, newNoteName) != 1)
-				{
-					System.out.println("ERROR: There was an error updating the database...");
-					request.setAttribute("error", "ERROR: You cannot have duplicate Note Names in the table!");
-				}
-			}
-			
-			RequestDispatcher dispatcher = request.getRequestDispatcher(url);
-	        dispatcher.forward(request, response);
 		}
 		catch (Exception e)
 		{

@@ -93,10 +93,18 @@ public class NotesRedirectServlet extends HttpServlet {
 			
 			//The next piece of code depends on if a keyword was provided or not.
 			String searchTerm = "";
+			String sortChoice;
+			String sortOrder;
 			searchTerm = request.getParameter("searchterm");
+			sortChoice = request.getParameter("sortchoice");
+			sortOrder = request.getParameter("sortorder");
 			ResultSet rs;
 			Statement st = dbConnection.createStatement();
-			if (searchTerm == null || searchTerm.length() == 0)
+			if (sortChoice != null && sortChoice.length() != 0 && sortOrder != null && sortOrder.length() != 0)
+			{
+				rs = nc.getSortedNotes(userName, sortChoice, sortOrder);
+			}
+			else if (searchTerm == null || searchTerm.length() == 0)
 			{
 				st = dbConnection.createStatement();
 				String query = "SELECT * FROM NOTES_TABLE WHERE ID ='" + userName + "'";

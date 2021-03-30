@@ -36,13 +36,12 @@
 	<br>
 	<table cellpadding="10" cellspacing="10" border="4px solid black" display="inline-block">
 	<tr>
-	<th>ID</th>
+	<th>NOTE NAME</th>
 	<th>NOTE</th>
 	<th>YEAR</th>
 	<th>MONTH</th>
 	<th>DAY</th>
-	<th>TIMECREATED</th>
-	<th>NOTESNAME</th>
+	<th>LAST MODIFIED</th>
 	<th>UPDATE</th>
 	</tr>
 	<%
@@ -55,13 +54,14 @@
 		out.print("<tr>");
 		out.print("<form action=\"./UpdateNoteServlet\">");
 		
-		out.print("<td>" + temp.get(0) + "</td>");
+		String noteNameParameter = temp.get(6) + "_input";
+		
+		out.print("<td>" + "<input name=\"" + noteNameParameter + "\" type=\"text\" size=\"20\" value = \"" + temp.get(6) + "\">" + "</td>");
 		out.print("<td>" + "<textarea id=\""+ temp.get(6) +"\" name=\""+ temp.get(6) +"\" rows=\"4\" cols=\"50\">" + temp.get(1) + "</textarea></td>");
 		out.print("<td>" + temp.get(2) + "</td>");
 		out.print("<td>" + temp.get(3) + "</td>");
 		out.print("<td>" + temp.get(4) + "</td>");
 		out.print("<td>" + temp.get(5) + "</td>");
-		out.print("<td>" + temp.get(6) + "</td>");
 		out.print("<td>" + "<input type=\"submit\" value=\"Update Note\">" + "</td>");
 		
 		out.print("</form>");
@@ -70,6 +70,20 @@
 	}
 	%>
 	</table>
+	
+	<br>
+	Filter the table by selecting a column and an order:
+	<form action="./NotesRedirectServlet">
+		<select name="sortchoice">
+			<option value="notename">Note Name</option>
+			<option value="datetime">Date and Time</option>
+		</select>
+		<select name="sortorder">
+			<option value="DESC">Descending</option>
+			<option value="ASC">Ascending</option>
+		</select>
+		<input type="submit" value="Order List">
+	</form>
 	
 	<br>
 	
