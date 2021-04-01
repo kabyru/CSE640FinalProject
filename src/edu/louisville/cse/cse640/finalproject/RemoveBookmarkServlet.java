@@ -13,21 +13,22 @@ import javax.servlet.http.HttpSession;
 
 import edu.louisville.cse640.cotrollers.DatabaseConnectionController;
 import edu.louisville.cse640.cotrollers.NotesController;
+import edu.louisville.cse640.cotrollers.BookmarksController;
 
 /**
- * Servlet implementation class RemoveNoteServlet
+ * Servlet implementation class RemoveBookmarkServlet
  */
-@WebServlet("/RemoveNoteServlet")
-public class RemoveNoteServlet extends HttpServlet {
+@WebServlet("/RemoveBookmarkServlet")
+public class RemoveBookmarkServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     private static Connection            dbConnection	= null;
     private DatabaseConnectionController dcc			= null;
-    private NotesController              nc				= null;
+    private BookmarksController          bc				= null;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public RemoveNoteServlet() {
+    public RemoveBookmarkServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -44,7 +45,7 @@ public class RemoveNoteServlet extends HttpServlet {
             }
             else
             {
-                nc = new NotesController(dbConnection);
+                bc = new BookmarksController(dbConnection);
             } // end if
         }
         else
@@ -59,15 +60,14 @@ public class RemoveNoteServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		//response.getWriter().append("Served at: ").append(request.getContextPath());
-		String url = "./NotesRedirectServlet";
+		String url = "./BookmarksRedirectServlet";
 		String userName = "";
-		String noteName = "";
+		String bookmarkName = "";
 		
-		noteName = request.getParameter("removeitem");
-		if (noteName == null || noteName.length() == 0)
+		bookmarkName = request.getParameter("removeitem");
+		if (bookmarkName == null || bookmarkName.length() == 0)
 		{
-			//url = "./AddNote.jsp";
-			request.setAttribute("error", "Note content or Note Name cannot be empty.");
+			request.setAttribute("error", "Bookmark Name cannot be empty.");
 		}
 		HttpSession session = request.getSession(true);
 		if (session != null)
@@ -83,10 +83,10 @@ public class RemoveNoteServlet extends HttpServlet {
 		try
 		{
 			connect2database();
-			//At this point, we now have userName and noteName. We can now call notesController.
-			if (nc.removeNote(userName, noteName) != 1)
+			//At this point, we now have userName and bookmarkName. We can now call bookmarksController.
+			if (bc.removeBookmark(userName,bookmarkName) != 1)
 			{
-				System.out.println("ERROR: There was an error removing the note to the Database...");
+				System.out.println("ERROR: There was an error removing the bookmark to the Database...");
 			}
 			
 			dcc.disconnectFromDatabase();

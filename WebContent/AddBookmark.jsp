@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Add a new Note</title>
+<title>Add a new Bookmark</title>
 </head>
 <body>
 	<%
@@ -23,16 +23,19 @@
 	}
 	%>
 	<font color="red"><%=error%></font>
-	<h2>Add a new note for <%=userName%></h2>
-	<form action="./AddNoteServlet" METHOD=GET>
+	<h2>Add a new bookmark for <%=userName%></h2>
+	<form action="./AddBookmarkServlet" METHOD=GET>
 		<table Style="border-collapse: separate; border-spacing: 4px;">
 		<tr>
 			<td>Enter the name of your note:</td>
-			<td><input name="notename" type="text" size="20"></td>
+			<td><input name="bookmarkname" type="text" size="20"></td>
+		</tr>
+		<tr>
+			<td>Enter the URL of the bookmark:</td>
+			<td><input name="bookmarkURL" type="text" size="20"></td>
 		</tr>
 		</table>
-		<textarea id="note" name="note" rows="4" cols="50"></textarea>
-		<input type="submit" value="Add Note to List">
+		<input type="submit" value="Add Bookmark to List">
 	</form>
 </body>
 </html>
