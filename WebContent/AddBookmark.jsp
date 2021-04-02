@@ -21,6 +21,15 @@
 	{
 		error = (String) err;
 	}
+	
+	//If userName is null, then the user is NOT allowed to be on this page! We need to redirect them immediately.
+	if (userN == null)
+	{
+		String url = "./Welcome.jsp";
+		RequestDispatcher dispatcher = request.getRequestDispatcher(url);
+        dispatcher.forward(request, response);
+	}
+	
 	%>
 	<font color="red"><%=error%></font>
 	<h2>Add a new bookmark for <%=userName%></h2>

@@ -92,6 +92,7 @@ public class AddBookmarkServlet extends HttpServlet {
 				if (session != null)
 				{
 					userName = (String) session.getAttribute("user");
+					System.out.println(userName);
 					request.setAttribute("username", userName);
 				}
 				if (session == null)

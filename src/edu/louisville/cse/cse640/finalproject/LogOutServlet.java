@@ -8,18 +8,19 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
- * Servlet implementation class WelcomeRedirectServlet
+ * Servlet implementation class LogOutServlet
  */
-@WebServlet("/WelcomeRedirectServlet")
-public class WelcomeRedirectServlet extends HttpServlet {
+@WebServlet("/LogOutServlet")
+public class LogOutServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public WelcomeRedirectServlet() {
+    public LogOutServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -30,9 +31,18 @@ public class WelcomeRedirectServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		//response.getWriter().append("Served at: ").append(request.getContextPath());
-		String url = "/Login.jsp";
+		HttpSession session = request.getSession(true);
+		if (session != null)
+		{
+			session.setAttribute("user", "");
+		}
+		if (session == null)
+		{
+			System.out.println("Session is null!");
+		}
+		String url = "/Welcome.jsp";
 		RequestDispatcher dispatcher = request.getRequestDispatcher(url);
-		dispatcher.forward(request, response);
+        dispatcher.forward(request, response);
 	}
 
 	/**

@@ -20,6 +20,13 @@
 	{
 		error = (String) errorMessage;
 	}
+	//If userName is null, then the user is NOT allowed to be on this page! We need to redirect them immediately.
+	if (userName == null)
+	{
+		String url = "./Welcome.jsp";
+		RequestDispatcher dispatcher = request.getRequestDispatcher(url);
+		dispatcher.forward(request, response);
+	}
 	Class.forName("com.ibm.db2.jcc.DB2Driver");
 	Object rss = request.getAttribute("results");
 	ArrayList<ArrayList<String>> results = (ArrayList<ArrayList<String>>) rss;

@@ -48,6 +48,10 @@
 		out.print("<form action=\"./BookmarksRedirectServlet\" METHOD=GET>");
 		out.print("<input type=\"submit\" value=\"My Saved Bookmarks\">");
 		out.print("</form>");
+		
+		out.print("<form action=\"./LogOutServlet\" METHOD=GET>");
+		out.print("<input type=\"submit\" value=\"Log out\">");
+		out.print("</form>");
 	}
 	%>
 	
