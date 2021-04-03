@@ -10,14 +10,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import edu.louisville.cse640.cotrollers.DatabaseConnectionController;
+import edu.louisville.cse640.cotrollers.ConnectionPool;
 import edu.louisville.cse640.cotrollers.NotesController;
 
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.List;
 import java.sql.ResultSet;
 
 /**
@@ -27,7 +25,7 @@ import java.sql.ResultSet;
 public class NotesRedirectServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     private static Connection            dbConnection	= null;
-    private DatabaseConnectionController dcc			= null;
+    private ConnectionPool				 pool			= null;
     private NotesController              nc				= null;
        
     /**
@@ -40,10 +38,10 @@ public class NotesRedirectServlet extends HttpServlet {
     
     private void connect2database()
     {
-        dcc = new DatabaseConnectionController("COMPANY");
-        if (dcc != null)
+    	pool = ConnectionPool.getInstance("jdbc/COMPANY");
+    	if (pool != null)
         {
-            dbConnection = dcc.getDbConnection();
+    		dbConnection = pool.getConnection();
             if (dbConnection == null)
             {
                 System.out.println("Connection Failed");
@@ -64,7 +62,6 @@ public class NotesRedirectServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		PrintWriter out = response.getWriter();
 		String userName = "";
 		String error = "";
 		//out.println("You've made it to the Notes Servlet!");
@@ -135,7 +132,7 @@ public class NotesRedirectServlet extends HttpServlet {
 			request.setAttribute("results",biDemArrList);
 			//rs.close();
 			st.close();
-			dcc.disconnectFromDatabase();
+			pool.freeConnection(dbConnection);
 			String url = "/NotesList.jsp";
 	        RequestDispatcher dispatcher = request.getRequestDispatcher(url);
 	        dispatcher.forward(request, response);

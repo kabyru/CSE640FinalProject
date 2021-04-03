@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import edu.louisville.cse640.cotrollers.DatabaseConnectionController;
+import edu.louisville.cse640.cotrollers.ConnectionPool;
 import edu.louisville.cse640.cotrollers.NotesController;
 
 /**
@@ -23,7 +23,7 @@ import edu.louisville.cse640.cotrollers.NotesController;
 public class UpdateNoteServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     private static Connection            dbConnection	= null;
-    private DatabaseConnectionController dcc			= null;
+    private ConnectionPool				 pool			= null;
     private NotesController              nc				= null;
        
     /**
@@ -36,10 +36,10 @@ public class UpdateNoteServlet extends HttpServlet {
 
     private void connect2database()
     {
-        dcc = new DatabaseConnectionController("COMPANY");
-        if (dcc != null)
+    	pool = ConnectionPool.getInstance("jdbc/COMPANY");
+    	if (pool != null)
         {
-            dbConnection = dcc.getDbConnection();
+    		dbConnection = pool.getConnection();
             if (dbConnection == null)
             {
                 System.out.println("Connection Failed");

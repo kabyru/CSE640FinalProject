@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import edu.louisville.cse640.cotrollers.ConnectionPool;
-import edu.louisville.cse640.cotrollers.DatabaseConnectionController;
 import edu.louisville.cse640.cotrollers.UsersController;
 
 /**
@@ -22,7 +21,6 @@ import edu.louisville.cse640.cotrollers.UsersController;
 public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     private static Connection            dbConnection	= null;
-    private DatabaseConnectionController dcc			= null;
     private UsersController              uc				= null;
     private ConnectionPool				 pool			= null;
        

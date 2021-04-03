@@ -11,8 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import edu.louisville.cse640.cotrollers.DatabaseConnectionController;
 import edu.louisville.cse640.cotrollers.BookmarksController;
+import edu.louisville.cse640.cotrollers.ConnectionPool;
 
 /**
  * Servlet implementation class AddBookmarkServlet
@@ -21,8 +21,8 @@ import edu.louisville.cse640.cotrollers.BookmarksController;
 public class AddBookmarkServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     private static Connection            dbConnection	= null;
-    private DatabaseConnectionController dcc			= null;
     private BookmarksController          bc				= null;
+    private ConnectionPool				 pool			= null;
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -34,10 +34,10 @@ public class AddBookmarkServlet extends HttpServlet {
 
     private void connect2database()
     {
-        dcc = new DatabaseConnectionController("COMPANY");
-        if (dcc != null)
+    	pool = ConnectionPool.getInstance("jdbc/COMPANY");
+        if (pool != null)
         {
-            dbConnection = dcc.getDbConnection();
+            dbConnection = pool.getConnection();
             if (dbConnection == null)
             {
                 System.out.println("Connection Failed");
@@ -123,7 +123,7 @@ public class AddBookmarkServlet extends HttpServlet {
 				}
 				//At this point, we have userName, bookmarkName, and bookmarkURL. We can now call bookmarksController
 				
-				dcc.disconnectFromDatabase();
+				pool.freeConnection(dbConnection);
 			}
 			catch (Exception e)
 			{
