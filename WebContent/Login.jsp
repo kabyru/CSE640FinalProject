@@ -7,7 +7,7 @@
 <title>Login User</title>
 </head>
 <body>
-	<h2>Enter your username and password for the database.</h2>
+	<h2>Enter your username and password.</h2>
 	<%
 	String error_message = "";
 	Object error = request.getAttribute("error");

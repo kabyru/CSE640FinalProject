@@ -4,11 +4,11 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>My Example Welcome Page</title>
+<title>CSE 640 Final Project Welcome Page</title>
 </head>
 <body>
-	<h1>Welcome to the login page!</h1>
-	<h2>This web-app will test connection with the USERS DB2 database table.</h2>
+	<h1>Welcome to Kaleb Byrum's CSE 640 Final Project</h1>
+	<h2>This web-app will interact with DB2 tables to store and manipulate notes and bookmarks.</h2>
 	
 	<%
 	String fullname = "";
