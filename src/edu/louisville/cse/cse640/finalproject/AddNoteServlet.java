@@ -90,12 +90,14 @@ public class AddNoteServlet extends HttpServlet {
 				if (nc.findNotesName(userName, noteName))
 				{
 					System.out.println("ERROR: Duplicate note names aren't allowed in the Database...");
+					request.setAttribute("error", "ERROR: Duplicate note names aren't allowed in the Database...");
 				}
 				else
 				{
 					if (nc.insertNote(userName, note, noteName) != 1)
 					{
 						System.out.println("ERROR: There was an error adding the note to the Database...");
+						request.setAttribute("error", "ERROR: There was an error adding the note to the Database...");
 					}
 				}
 				

@@ -117,7 +117,7 @@ public class UpdateNoteServlet extends HttpServlet {
 			{
 				if (nc.updateNoteNickname(userName, noteName, newNoteName) != 1)
 				{
-					System.out.println("ERROR: There was an error updating the database...");
+					System.out.println("ERROR: You cannot have duplicate Note Names in the table!");
 					request.setAttribute("error", "ERROR: You cannot have duplicate Note Names in the table!");
 				}
 			}

@@ -79,18 +79,67 @@
 	</table>
 	
 	<br>
+	
 	Filter the table by selecting a column and an order:
-	<form action="./NotesRedirectServlet">
-		<select name="sortchoice">
-			<option value="notename">Note Name</option>
-			<option value="datetime">Date and Time</option>
-		</select>
-		<select name="sortorder">
-			<option value="DESC">Descending</option>
-			<option value="ASC">Ascending</option>
-		</select>
-		<input type="submit" value="Order List">
-	</form>
+	<%
+	//sortchoice and sortorder
+	//sortchoice can either be "", "notename", "datetime"
+	//sortorder can either be "", "DESC", "ASC"
+	//Retrieve these variables from getAttributes and set the default "selected" as such.
+	Object sortchoice = request.getAttribute("sortchoice");
+	Object sortorder = request.getAttribute("sortorder");
+	String sortChoice = "";
+	String sortOrder = "";
+	if (sortchoice != null)
+	{
+		sortChoice = sortchoice.toString();
+	}
+	if (sortorder != null)
+	{
+		sortOrder = (String) sortorder;
+	}
+	
+	//selected = "selected" needs to be applied depending on the values of sortChoice and sortOrder
+	out.print("<form action=\"./NotesRedirectServlet\">");
+	out.print("<select name=\"sortchoice\">");
+	
+	if (sortChoice.equals(""))
+	{
+		out.print("<option value=\"notename\">Note Name</option>");
+		out.print("<option value=\"datetime\">Date and Time</option>");
+	}
+	else if (sortChoice.equals("notename"))
+	{
+		out.print("<option value=\"notename\" selected=\"selected\">Note Name</option>");
+		out.print("<option value=\"datetime\">Date and Time</option>");
+	}
+	else
+	{
+		out.print("<option value=\"notename\">Note Name</option>");
+		out.print("<option value=\"datetime\" selected=\"selected\">Date and Time</option>");
+	}
+	out.print("</select>");
+	
+	out.print("<select name=\"sortorder\">");
+	if (sortOrder.equals(""))
+	{
+		out.print("<option value=\"DESC\">Descending</option>");
+		out.print("<option value=\"ASC\">Ascending</option>");
+	}
+	else if (sortOrder.equals("ASC"))
+	{
+		out.print("<option value=\"DESC\">Descending</option>");
+		out.print("<option value=\"ASC\" selected=\"selected\">Ascending</option>");
+	}
+	else
+	{
+		out.print("<option value=\"DESC\" selected=\"selected\">Descending</option>");
+		out.print("<option value=\"ASC\">Ascending</option>");
+	}
+	out.print("</select>");
+	out.print("<input type=\"submit\" value=\"Order List\">");
+	out.print("</form>");
+	%>
 	
 	<br>
 	

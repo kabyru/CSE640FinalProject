@@ -76,7 +76,7 @@
 	Filter the table by selecting a column and an order:
 	<form action="./BookmarksRedirectServlet">
 		<select name="sortchoice">
-			<option value="bookmarkname">Note Name</option>
+			<option value="bookmarkname">Bookmark Name</option>
 			<option value="datetime">Date and Time</option>
 		</select>
 		<select name="sortorder">
