@@ -92,7 +92,6 @@ public class BookmarksRedirectServlet extends HttpServlet {
 			String searchTerm = "";
 			String sortChoice;
 			String sortOrder;
-			
 			searchTerm = request.getParameter("searchterm");
 			sortChoice = request.getParameter("sortchoice");
 			sortOrder = request.getParameter("sortorder");
