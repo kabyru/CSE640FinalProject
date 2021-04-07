@@ -96,22 +96,77 @@ public class BookmarksRedirectServlet extends HttpServlet {
 			sortChoice = request.getParameter("sortchoice");
 			sortOrder = request.getParameter("sortorder");
 			
+			//If sortChoice and sortOrder are null, as in, no parameter is given, let's pull their stored values from the Session.
+			if (sortChoice == null && sortOrder == null)
+			{
+				Object sortChoiceTemp = session.getAttribute("sortchoice");
+				if (sortChoiceTemp != null)
+				{
+					sortChoice = (String) sortChoiceTemp;
+				}
+				Object sortOrderTemp = session.getAttribute("sortorder");
+				if (sortOrderTemp != null)
+				{
+					sortOrder = (String) sortOrderTemp;
+				}
+			}
+			if (sortChoice != null && sortChoice.length() != 0)
+			{
+				session.setAttribute("sortchoice", sortChoice);
+				request.setAttribute("sortchoice", sortChoice);
+			}
+			if (sortOrder != null && sortOrder.length() != 0)
+			{
+				session.setAttribute("sortorder", sortOrder);
+				request.setAttribute("sortchoice", sortChoice);
+			}
+			
 			ResultSet rs;
 			Statement st = dbConnection.createStatement();
 			
-			if (sortChoice != null && sortChoice.length() != 0 && sortOrder != null && sortOrder.length() != 0)
+			if (sortChoice != null && sortChoice.length() != 0)
+			{
+				System.out.println(sortChoice);
+			}
+			else
+			{
+				System.out.println("sortChoice is NULL or length = 0");
+			}
+			
+			if (sortOrder != null && sortOrder.length() != 0)
+			{
+				System.out.println(sortOrder);
+			}
+			else
+			{
+				System.out.println("sortOrder is NULL or length = 0");
+			}
+			
+			if (searchTerm != null && searchTerm.length() != 0)
+			{
+				if (sortChoice != null && sortChoice.length() != 0 && sortOrder != null && sortOrder.length() != 0)
+				{
+					rs = bc.getFilteredBookmarks(userName, searchTerm, sortChoice, sortOrder);
+					request.setAttribute("sortchoice", sortChoice);
+					request.setAttribute("sortorder", sortOrder);
+				}
+				else
+				{
+					rs = bc.getFilteredBookmarks(userName, searchTerm);
+				}
+				
+			}
+			else if (sortChoice != null && sortChoice.length() != 0 && sortOrder != null && sortOrder.length() != 0)
 			{
 				rs = bc.getSortedBookmarks(userName, sortChoice, sortOrder);
+				request.setAttribute("sortchoice", sortChoice);
+				request.setAttribute("sortorder", sortOrder);
 			}
-			else if (searchTerm == null || searchTerm.length() == 0)
+			else
 			{
 				st = dbConnection.createStatement();
 				String query = "SELECT * FROM BOOKMARKS_TABLE WHERE ID ='" + userName + "'";
 				rs = st.executeQuery(query);
-			}
-			else
-			{
-				rs = bc.getFilteredBookmarks(userName, searchTerm);
 			}
 			
 			ArrayList<ArrayList<String>> biDemArrList = new ArrayList<ArrayList<String>>();
