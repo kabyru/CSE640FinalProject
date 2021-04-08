@@ -44,9 +44,6 @@
 	<tr>
 	<th>BOOKMARK NAME</th>
 	<th>URL</th>
-	<th>YEAR</th>
-	<th>MONTH</th>
-	<th>DAY</th>
 	<th>LAST MODIFIED</th>
 	</tr>
 	
@@ -59,12 +56,9 @@
 		
 		out.print("<tr>");
 		
-		out.print("<td>" + temp.get(6) + "</td>");
+		out.print("<td>" + temp.get(3) + "</td>");
 		out.print("<td>" + "<a href=\""+ temp.get(1) +"\">" + temp.get(1) + "</a>");
 		out.print("<td>" + temp.get(2) + "</td>");
-		out.print("<td>" + temp.get(3) + "</td>");
-		out.print("<td>" + temp.get(4) + "</td>");
-		out.print("<td>" + temp.get(5) + "</td>");
 		
 		out.print("</tr>");
 	}
@@ -153,7 +147,7 @@
 		while (iter.hasNext())
 		{
 			ArrayList temp = (ArrayList) iter.next();
-			out.print("<option value= \"" + temp.get(6) + "\">" + temp.get(6) + "</option>");
+			out.print("<option value= \"" + temp.get(3) + "\">" + temp.get(3) + "</option>");
 		}
 		%>
 		</select>

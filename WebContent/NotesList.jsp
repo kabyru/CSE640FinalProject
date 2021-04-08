@@ -45,9 +45,6 @@
 	<tr>
 	<th>NOTE NAME</th>
 	<th>NOTE</th>
-	<th>YEAR</th>
-	<th>MONTH</th>
-	<th>DAY</th>
 	<th>LAST MODIFIED</th>
 	<th>UPDATE</th>
 	</tr>
@@ -61,14 +58,11 @@
 		out.print("<tr>");
 		out.print("<form action=\"./UpdateNoteServlet\">");
 		
-		String noteNameParameter = temp.get(6) + "_input";
+		String noteNameParameter = temp.get(3) + "_input";
 		
-		out.print("<td>" + "<input name=\"" + noteNameParameter + "\" type=\"text\" size=\"20\" value = \"" + temp.get(6) + "\">" + "</td>");
-		out.print("<td>" + "<textarea id=\""+ temp.get(6) +"\" name=\""+ temp.get(6) +"\" rows=\"4\" cols=\"50\">" + temp.get(1) + "</textarea></td>");
+		out.print("<td>" + "<input name=\"" + noteNameParameter + "\" type=\"text\" size=\"20\" value = \"" + temp.get(3) + "\">" + "</td>");
+		out.print("<td>" + "<textarea id=\""+ temp.get(3) +"\" name=\""+ temp.get(3) +"\" rows=\"4\" cols=\"50\">" + temp.get(1) + "</textarea></td>");
 		out.print("<td>" + temp.get(2) + "</td>");
-		out.print("<td>" + temp.get(3) + "</td>");
-		out.print("<td>" + temp.get(4) + "</td>");
-		out.print("<td>" + temp.get(5) + "</td>");
 		out.print("<td>" + "<input type=\"submit\" value=\"Update Note\">" + "</td>");
 		
 		out.print("</form>");
@@ -159,7 +153,7 @@
 		while (iter.hasNext())
 		{
 			ArrayList temp = (ArrayList) iter.next();
-			out.print("<option value= \"" + temp.get(6) + "\">" + temp.get(6) + "</option>");
+			out.print("<option value= \"" + temp.get(3) + "\">" + temp.get(3) + "</option>");
 		}
 		%>
 		</select>

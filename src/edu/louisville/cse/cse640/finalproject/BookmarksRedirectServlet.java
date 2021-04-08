@@ -176,11 +176,8 @@ public class BookmarksRedirectServlet extends HttpServlet {
 				ArrayList<String> temp = new ArrayList<String>();
 				temp.add(rs.getString(1));
 				temp.add(rs.getString(2));
-				temp.add(String.valueOf(rs.getInt(3)));
-				temp.add(String.valueOf(rs.getInt(4)));
-				temp.add(String.valueOf(rs.getInt(5)));
-				temp.add(rs.getString(6));
-				temp.add(rs.getString(7));
+				temp.add(rs.getString(3));
+				temp.add(rs.getString(4));
 				biDemArrList.add(temp);
 			}
 			
