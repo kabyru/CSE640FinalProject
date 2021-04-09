@@ -72,7 +72,7 @@ public class RegisterServlet extends HttpServlet {
             try
             {
                 connect2database();
-                if (uc.findUser(username, password) == true)
+                if (uc.findUser(username) == true)
                 {
                     request.setAttribute("fullname", uc.getFullName());
 					url = "/NewUser.jsp";
