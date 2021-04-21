@@ -8,6 +8,7 @@
     <welcome-file>default.html</welcome-file>
     <welcome-file>default.htm</welcome-file>
     <welcome-file>default.jsp</welcome-file>
+    <welcome-file>Welcome.jsp</welcome-file>
   </welcome-file-list>
   <resource-ref>
   	<res-ref-name>jdbc/COMPANY</res-ref-name>
